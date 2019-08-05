@@ -1,0 +1,2 @@
+C:\Users\Danny\Desktop\Waterlog\obj\x86\Release\Waterlog.vbprojAssemblyReference.cache
+C:\Users\Danny\Desktop\Waterlog\obj\x86\Release\Waterlog.vbproj.CoreCompileInputs.cache

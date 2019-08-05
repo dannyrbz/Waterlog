@@ -1,0 +1,353 @@
+﻿<!doctype html>
+<html lang="en">
+    
+<head>
+    <title>Waterlog</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Font -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css?family=Rubik:300,400,500" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- Themify Icons -->
+    <link rel="stylesheet" href="css/themify-icons.css">
+    <!-- Owl carousel -->
+    <link rel="stylesheet" href="css/owl.carousel.min.css">
+    <!-- Main css -->
+    <link href="css/style.css" rel="stylesheet">
+
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-firestore.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+    <script src="https://cdn.rawgit.com/kimmobrunfeldt/progressbar.js/0.5.6/dist/progressbar.js"></script>
+    <script src="//code.jquery.com/jquery.min.js"></script>   
+</head>
+
+<body data-spy="scroll" data-target="#navbar" data-offset="30">
+    <!-- Nav Menu -->
+
+    <div id="nav-placeholder"></div>
+
+    <script>
+    $(function(){
+        $("#nav-placeholder").load("nav.html");
+    });
+    </script>
+
+
+    <header class="bg-gradient" id="home">
+        <div class="container mt-5">
+            <h1>Welcome to Waterlog</h1>
+            <p class="tagline">Automates tracking, analysis and prediction for water usage and bills </p>
+            <br><br>
+            <div class="container m5-5 col-12 d-flex">
+                <input  type="text" placeholder="Enter Meter ID" id="inputmeterid">
+                <button id="renderBtn">SEARCH</button>
+            </div>
+        </div>
+        <br>
+    </header>
+    
+
+    <!-- // end .section -->
+
+    <!-- Dashboard -->
+
+    <div class="section light-bg" id="dashboard1" style = "display: none" >
+            <div class="container">
+            
+            <div class="section-title">
+                <small>USAGE</small>
+                <h3>Dashboard</h3>
+            </div>
+            
+            <div class="row">
+                    <div class="col-12 col-lg-3">
+                        <div class="card features">
+                            <div class="card-body">
+                                <div class="media">
+                                    <span class="ti-search gradient-fill ti-3x mr-3"></span>
+                                    <div class="media-body">
+                                        <h5 class="card-title">Weekly Usage</h5>
+                                        <p class="card-text" id="weekly">0 litres/day</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <div class="card features">
+                            <div class="card-body">
+                                <div class="media">
+                                    <span class="ti-calendar gradient-fill ti-3x mr-3"></span>
+                                    <div class="media-body">
+                                        <h5 class="card-title">Monthly Usage</h5>
+                                        <p class="card-text" id="monthly">0 litres/day</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3">
+                        <div class="card features">
+                            <div class="card-body">
+                                <div class="media">
+                                    <span class="ti-location-arrow gradient-fill ti-3x mr-3"></span>
+                                    <div class="media-body">
+                                        <h5 class="card-title">Postcode Average</h5>
+                                        <p class="card-text" id="postcode">0 litres/day</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3">
+                            <div class="card features">
+                                <div class="card-body">
+                                    <div class="media">
+                                        <span class="ti-stats-down gradient-fill ti-3x mr-3"></span>
+                                        <div class="media-body">
+                                            <h5 class="card-title">Reservoir Level</h5>
+                                            <p class="card-text" id="reservoir">0 %</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                    <div class="col-12 d-flex">
+                            <div class="container d-flex">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div id="progressbar" width="50" height="50"></div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                            <ul id="reading"></ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+            <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <div class="card features">
+                            <div class="card-body">
+                                <div class="media" id="daily-media">
+                                    <div class="media-body"><div class="progressbarchart" id="daily-usage-circle"></div></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6">
+                        <div class="card features">
+                            <div class="card-body">
+                                <div class="media">
+                                    <div class="media-body" id="reading-media">
+                                            <h5 class="card-title">Today's readings</h5><table class="reading-table" id="recent-readings"><tr><th>First reading</th><td id="first-reading"></td></tr><tr class="reading-row"><th>Time</th><th>Usage</th></tr></table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12 d-flex">
+                        <div class="container d-flex">
+                            <div class="row"> 
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div id="progressbar" width="50" height="50"></div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <ul id="reading"></ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+            
+            <div class="row">
+                <div class="col-12 col-lg-12">
+                    <div class="card features">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="media-body siema" id="chartsDiv">
+                                    <div>
+                                        <c class="month-title"></c>
+                                        <a href="#" class="previous round">&#8249;</a><h3 class="section-title" id="chart' + month + '">Date</h3><a href="#" class="next round">&#8250;</a><br><canvas id="' + month + '" width="400" height="150"></canvas></div>                          
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>  
+        </div>
+        
+    <!-- // end .section -->
+
+    <!-- Features -->
+    
+    <div class="section" id="features">
+        
+        <div class="container">
+
+            <div class="section-title">
+                <small>HIGHLIGHTS</small>
+                <h3>Features you love</h3>
+            </div>
+
+            <div class="row">
+                <div class="col-12 col-lg-4">
+                    <div class="card features extra">
+                        <div class="card-body">
+                            <div class="media">
+                                <span class="ti-dashboard gradient-fill ti-3x mr-3"></span>
+                                <div class="media-body">
+                                    <h4 class="card-title">Track</h4>
+                                    <p class="card-text">Set a daily target and track your progress as you go about your day</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="card features extra">
+                        <div class="card-body">
+                            <div class="media">
+                                <span class="ti-bar-chart-alt gradient-fill ti-3x mr-3"></span>
+                                <div class="media-body">
+                                    <h4 class="card-title">Analyze</h4>
+                                    <p class="card-text">View your past water usage to see your usage patterns </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="card features extra">
+                        <div class="card-body">
+                            <div class="media">
+                                <span class="ti-stats-down gradient-fill ti-3x mr-3"></span>
+                                <div class="media-body">
+                                    <h4 class="card-title">Predict</h4>
+                                    <p class="card-text">Use the prediction tool to estimate your upcoming water bill </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // end .section -->
+
+
+    <!-- Screenshots -->
+
+    <div class="section light-bg" id="gallery">
+        <div class="container">
+            <div class="section-title">
+                <small>GALLERY</small>
+                <h3>App Screenshots</h3>
+            </div>
+
+            <div class="img-gallery owl-carousel owl-theme">
+                <img src="images/TargetTab1.png" alt="image">
+                <img src="images/HistoryTab1.png" alt="image">
+                <img src="images/HistoryTab2.png" alt="image">
+                <img src="images/ReportTab1.png" alt="image">
+                <img src="images/ReportTab2.png" alt="image">
+                <img src="images/ReservoirTab.png" alt="image">
+                <img src="images/SettingTab1.png" alt="image">
+                <img src="images/DeviceTab.png" alt="image">
+            </div>
+
+        </div>
+
+    </div>
+    <!-- // end .section -->
+
+    <!-- Product video -->
+
+    <div class="section" id="product-video">
+            <div class="container">
+    
+                <div class="section-title">
+                    <small>VIDEO</small>
+                    <h3>Product Video</h3>
+                </div>
+                <div>
+                    <iframe width=100% height="500" src="https://www.youtube.com/embed/OZZKh51OQHs" frameborder="0" allowfullscreen></iframe>
+                </div>
+            </div>
+    
+        </div>
+    <!-- // end .section -->
+
+    <div class="section bg-gradient">
+        <div class="container">
+            <div class="call-to-action">
+                <div class="box-icon"><span class="ti-mobile gradient-fill ti-3x"></span></div>
+                <h2>Download Anywhere</h2>
+                <p class="tagline">Available for all android devices. </p>
+                <div class="my-4">
+                    <a href="https://play.google.com/store/apps/details?id=com.jadeite.waterlog32" target="_blank" class="btn btn-light"><img src="images/playicon.png" alt="icon"> Google play</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- // end .section -->
+
+    <div class="light-bg py-5" id="contact">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 text-center text-lg-left">
+                    <p class="mb-2"> <span class="ti-location-pin mr-2"></span> 900 Dandenong Rd, Caulfield East VIC 3145</p>
+                    <div class=" d-block d-sm-inline-block">
+                        <p class="mb-2">
+                            <span class="ti-email mr-2"></span> <a class="mr-4" href="mailto:jadeite.order@gmail.com">jadeite.support@gmail.com</a>
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    <!-- // end .section -->
+    <footer class="my-5 text-center">
+        <p class="mb-2"><small>Made with ❤ by Jadeite ・ Copyright © 2019 ・ Waterlog</small></p>
+    </footer>
+
+    <!-- jQuery and Bootstrap -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <!-- Plugins JS -->
+    <script src="js/owl.carousel.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/script.js"></script>
+    <!-- Progress bar JS -->
+    <script src="js/progressbar.min.js"></script>
+
+    <script src="js/firestore.js"></script>
+
+    <!-- Siema carousel -->
+    <script src="js/siema.min.js"></script>
+    <script>
+        //document.querySelector('.prev').addEventListener('click', () => mySiema.prev());
+        //document.querySelector('.next').addEventListener('click', () => mySiema.next());
+    </script>
+    
+    <script src="js/myChart.js"></script>
+
+
+    
+
+
+</body>
+
+</html>
