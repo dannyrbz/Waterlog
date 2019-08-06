@@ -4,4 +4,4 @@ This website was secondary application created as part of my group assignment fo
 
 The website also allows users to view their water usage data by entering their unique meter id which will retrieve data from the firebase database
 
-You can view the website at https://www.waterlog.ml/
+You can view the website [here](https://www.waterlog.ml/)
