@@ -1,4 +1,4 @@
-## Waterlg
+## Waterlog
 
 [Waterlog](https://waterlogjadeite.azurewebsites.net/) was a secondary application created as part of a university group project. Its main purpose is to provide information to the users about the main product of the project, which is a smart water meter reading device. Users can also view their water usage data by entering their unique meter id which will retrieve data from the firebase database.  
 
